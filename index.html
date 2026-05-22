@@ -762,22 +762,37 @@ function exportSite() {
       .then(function(r) { return r.text(); })
       .then(function(src) {
 
-        /* 1. Inject uploaded images into slide options arrays */
+        /* 1. Inject uploaded images into slide option arrays.
+           IMPORTANT: do this once per slide. Replacing image-by-image changes
+           the number of remaining "src": null entries, so later option numbers
+           can be missed (example: uploaded options 1, 2 and 5). */
+        var imagesBySlide = {};
         Object.keys(imgMap).forEach(function(key) {
-          var parts  = key.split('-');
-          var slide  = parseInt(parts[0]);
-          var n      = parseInt(parts[1]);
-          var b64    = imgMap[key];
+          var parts = key.split('-');
+          var slide = parseInt(parts[0], 10);
+          var n     = parseInt(parts[1], 10);
+          if (!slide || !n) return;
+          if (!imagesBySlide[slide]) imagesBySlide[slide] = {};
+          imagesBySlide[slide][n] = imgMap[key];
+        });
+
+        Object.keys(imagesBySlide).forEach(function(slideKey) {
+          var slide  = parseInt(slideKey, 10);
           var marker = 'const slide' + slide + 'Options = ';
           var aStart = src.indexOf(marker);
           if (aStart === -1) return;
-          var aEnd   = src.indexOf('];', aStart) + 2;
+          var aEnd = src.indexOf('];', aStart);
+          if (aEnd === -1) return;
+          aEnd += 2;
+
           var arrStr = src.slice(aStart, aEnd);
-          var count  = 0;
+          var optionIndex = 0;
           var newArr = arrStr.replace(/"src": null/g, function(m) {
-            count++;
-            return count === n ? '"src": "' + b64 + '"' : m;
+            optionIndex++;
+            var uploadedSrc = imagesBySlide[slide][optionIndex];
+            return uploadedSrc ? '"src": ' + JSON.stringify(uploadedSrc) : m;
           });
+
           src = src.slice(0, aStart) + newArr + src.slice(aEnd);
         });
 
@@ -791,13 +806,11 @@ function exportSite() {
             var arr = src.slice(s1, e1);
             /* parse, null out deleted indices, re-serialize */
             try {
-              var varStr = arr.slice(m1.length, arr.length - 1); /* the [...] part */
               /* use a simpler approach - mark deleted items */
               dels1.forEach(function(idx) {
                 /* find the (idx+1)th object in the array and add deleted marker */
-                var objCount = 0;
                 arr = arr.replace(/\{[\s\S]*?id: (\d+),/g, function(m, id) {
-                  if (parseInt(id) - 1 === idx) return '{ id: ' + id + ', src: null, headline: "", label: "" ,';
+                  if (parseInt(id, 10) - 1 === idx) return '{ id: ' + id + ', src: null, headline: "", label: "" ,';
                   return m;
                 });
               });
@@ -814,7 +827,7 @@ function exportSite() {
         });
         /* inject as a data attribute on <html> - read by initTracks */
         var safeM = meta.replace(/&/g, '&amp;').replace(/"/g, '&quot;');
-        src = src.replace('<html lang="en">', '<html lang="en" data-preload="' + safeM + '">')
+        src = src.replace('<html lang="en">', '<html lang="en" data-preload="' + safeM + '">');
 
         /* 4. Download */
         var blob = new Blob([src], {type: 'text/html; charset=utf-8'});
