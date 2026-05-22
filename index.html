@@ -4,505 +4,300 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Ninja Blast — Creative Showcase</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ─── RESET ─── */
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
-  --red:#E31837;
-  --black:#080808;
-  --dark:#0f0f0f;
-  --card:#161616;
-  --border:#222;
-  --text:#fff;
-  --muted:#888;
-  --dim:#3a3a3a;
+  --red:#E31837;--black:#080808;--dark:#0f0f0f;
+  --card:#161616;--border:#222;--muted:#888;--dim:#3a3a3a;
 }
 html{scroll-behavior:smooth;}
-body{background:var(--black);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh;overflow-x:hidden;}
-
-/* ─── SCROLLBAR ─── */
+body{background:var(--black);color:#fff;font-family:"DM Sans",sans-serif;overflow-x:hidden;}
 ::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-track{background:var(--black);}
 ::-webkit-scrollbar-thumb{background:var(--dim);border-radius:2px;}
 
-/* ─── NAV ─── */
+/* NAV */
 nav{
   position:fixed;top:0;left:0;right:0;z-index:100;
   display:flex;align-items:center;justify-content:space-between;
-  padding:0 40px;height:64px;
-  background:rgba(8,8,8,0.92);
-  backdrop-filter:blur(12px);
+  padding:0 40px;height:60px;
+  background:rgba(8,8,8,0.95);backdrop-filter:blur(12px);
   border-bottom:0.5px solid var(--border);
 }
-.nav-logo{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:22px;letter-spacing:2px;color:#fff;
-  display:flex;align-items:center;gap:10px;
-}
-.nav-logo-sub{
-  font-family:'DM Sans',sans-serif;font-size:9px;
-  font-weight:500;letter-spacing:3px;color:var(--red);
-  text-transform:uppercase;margin-top:2px;
-}
-.nav-badge{
-  background:var(--red);color:#fff;
-  font-size:8px;font-weight:700;letter-spacing:2px;
-  text-transform:uppercase;padding:4px 10px;border-radius:2px;
-}
-.nav-links{display:flex;gap:28px;align-items:center;}
-.nav-links a{
-  color:var(--muted);font-size:12px;font-weight:500;
-  letter-spacing:1px;text-decoration:none;text-transform:uppercase;
-  transition:color .2s;
-}
+.nav-logo{font-family:"Bebas Neue",sans-serif;font-size:20px;letter-spacing:2px;display:flex;align-items:center;gap:8px;}
+.nav-logo-tag{font-size:8px;font-weight:600;letter-spacing:3px;color:var(--red);text-transform:uppercase;}
+.nav-pill{background:var(--red);color:#fff;font-size:8px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;}
+.nav-links{display:flex;gap:24px;align-items:center;}
+.nav-links a{color:var(--muted);font-size:11px;font-weight:500;letter-spacing:1px;text-decoration:none;text-transform:uppercase;transition:color .2s;}
 .nav-links a:hover{color:#fff;}
 
-/* ─── HERO ─── */
+/* HERO — trimmed */
 .hero{
-  min-height:100vh;display:flex;align-items:center;
-  padding:120px 40px 60px;position:relative;overflow:hidden;
+  padding:100px 40px 64px;
+  border-bottom:0.5px solid var(--border);
+  display:flex;align-items:center;justify-content:space-between;gap:40px;
 }
-.hero-bg{
-  position:absolute;inset:0;
-  background:radial-gradient(ellipse 60% 60% at 80% 50%, rgba(227,24,55,0.08) 0%, transparent 70%);
-}
-.hero-stripe{position:absolute;top:0;left:0;right:0;height:3px;background:var(--red);}
-.hero-content{position:relative;z-index:1;max-width:680px;}
-.hero-eyebrow{
-  font-size:9px;font-weight:600;letter-spacing:4px;
-  color:var(--red);text-transform:uppercase;margin-bottom:20px;
-}
-.hero-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(64px,8vw,100px);
-  line-height:0.88;letter-spacing:1px;color:#fff;
-  margin-bottom:24px;
-}
-.hero-title .red{color:var(--red);}
-.hero-desc{
-  font-size:15px;font-weight:300;color:var(--muted);
-  line-height:1.7;max-width:460px;margin-bottom:36px;
-}
-.hero-stats{display:flex;gap:32px;margin-bottom:44px;}
-.stat-item{border-left:2px solid var(--red);padding-left:16px;}
-.stat-num{font-family:'Bebas Neue',sans-serif;font-size:32px;color:#fff;line-height:1;}
-.stat-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:4px;}
-.hero-cta{
-  display:inline-flex;align-items:center;gap:10px;
-  background:var(--red);color:#fff;
-  font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
-  padding:14px 28px;border-radius:2px;text-decoration:none;
-  transition:opacity .2s;
-}
-.hero-cta:hover{opacity:.85;}
-.hero-cta-ghost{
-  display:inline-flex;align-items:center;gap:10px;
-  border:0.5px solid var(--dim);color:var(--muted);
-  font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;
-  padding:14px 24px;border-radius:2px;text-decoration:none;
-  margin-left:12px;transition:all .2s;
-}
+.hero-left{max-width:520px;}
+.hero-eyebrow{font-size:9px;font-weight:600;letter-spacing:4px;color:var(--red);text-transform:uppercase;margin-bottom:14px;}
+.hero-title{font-family:"Bebas Neue",sans-serif;font-size:clamp(44px,6vw,72px);line-height:0.9;letter-spacing:1px;margin-bottom:18px;}
+.hero-desc{font-size:14px;font-weight:300;color:var(--muted);line-height:1.7;margin-bottom:28px;}
+.hero-stats{display:flex;gap:28px;margin-bottom:32px;}
+.stat{border-left:2px solid var(--red);padding-left:14px;}
+.stat-n{font-family:"Bebas Neue",sans-serif;font-size:28px;line-height:1;}
+.stat-l{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.hero-cta{display:inline-flex;align-items:center;gap:8px;background:var(--red);color:#fff;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:12px 24px;border-radius:2px;text-decoration:none;margin-right:10px;}
+.hero-cta-ghost{display:inline-flex;align-items:center;gap:8px;border:0.5px solid var(--dim);color:var(--muted);font-size:10px;font-weight:500;letter-spacing:2px;text-transform:uppercase;padding:12px 20px;border-radius:2px;text-decoration:none;transition:all .2s;}
 .hero-cta-ghost:hover{border-color:var(--muted);color:#fff;}
+.hero-right{display:flex;gap:12px;flex-shrink:0;}
+.hero-stat-card{background:var(--card);border:0.5px solid var(--border);border-radius:4px;padding:20px 24px;text-align:center;min-width:100px;}
+.hsc-n{font-family:"Bebas Neue",sans-serif;font-size:32px;color:#fff;}
+.hsc-l{font-size:9px;color:var(--muted);letter-spacing:1.5px;text-transform:uppercase;margin-top:4px;}
 
-/* ─── SECTION ─── */
-.section{padding:80px 40px;}
+/* SECTION */
+.section{padding:64px 40px;}
 .section+.section{border-top:0.5px solid var(--border);}
-.section-header{
-  display:flex;align-items:flex-end;justify-content:space-between;
-  margin-bottom:36px;
+.section-hdr{margin-bottom:32px;}
+.s-eyebrow{font-size:8px;font-weight:600;letter-spacing:3px;color:var(--red);text-transform:uppercase;margin-bottom:8px;}
+.s-title{font-family:"Bebas Neue",sans-serif;font-size:28px;letter-spacing:1px;}
+.s-sub{font-size:12px;color:var(--muted);margin-top:5px;font-weight:300;}
+
+/* SLIDE GROUP */
+.slide-group{margin-bottom:52px;}
+.sg-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.sg-num{width:30px;height:30px;border-radius:50%;background:var(--red);font-family:"Bebas Neue",sans-serif;font-size:15px;color:#fff;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.sg-label{font-family:"Bebas Neue",sans-serif;font-size:18px;letter-spacing:.5px;}
+.sg-desc{font-size:10px;color:var(--muted);margin-top:1px;}
+.sg-status{margin-left:auto;font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:4px 10px;border-radius:2px;}
+.live{background:rgba(34,197,94,.1);color:#4ade80;}
+.pending{background:rgba(255,255,255,.04);color:var(--dim);}
+
+/* TRACK */
+.track{display:flex;gap:14px;overflow-x:auto;padding:4px 0 16px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch;scrollbar-width:thin;}
+.track::-webkit-scrollbar{height:3px;}
+.track::-webkit-scrollbar-thumb{background:var(--dim);}
+
+/* CARD */
+.card{flex-shrink:0;width:250px;background:var(--card);border-radius:4px;border:0.5px solid var(--border);overflow:hidden;position:relative;transition:border-color .2s,transform .15s;}
+.card:hover{border-color:#444;transform:translateY(-2px);}
+.card.selected{border-color:var(--red) !important;border-width:1.5px;}
+
+.img-wrap{width:100%;aspect-ratio:1/1;position:relative;overflow:hidden;background:var(--dark);}
+.img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
+
+/* card overlay controls — show on hover */
+.card-overlay{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,0);
+  display:flex;align-items:flex-start;justify-content:flex-end;
+  padding:8px;gap:6px;
+  transition:background .2s;
+  z-index:2;
 }
-.section-title-group{}
-.section-eyebrow{
-  font-size:8px;font-weight:600;letter-spacing:3px;
-  color:var(--red);text-transform:uppercase;margin-bottom:8px;
-}
-.section-title{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:36px;letter-spacing:1px;color:#fff;line-height:1;
-}
-.section-sub{font-size:13px;color:var(--muted);margin-top:6px;font-weight:300;}
-.section-nav{display:flex;gap:8px;}
-.s-nav-btn{
-  width:36px;height:36px;border-radius:50%;
-  border:0.5px solid var(--border);background:transparent;
-  color:var(--muted);cursor:pointer;
+.img-wrap:hover .card-overlay{background:rgba(0,0,0,0.4);}
+.overlay-btn{
+  width:28px;height:28px;border-radius:50%;border:none;cursor:pointer;
   display:flex;align-items:center;justify-content:center;
-  font-size:16px;transition:all .2s;
+  font-size:12px;font-weight:700;
+  opacity:0;transition:opacity .2s;
+  backdrop-filter:blur(4px);
 }
-.s-nav-btn:hover{border-color:var(--red);color:var(--red);}
+.img-wrap:hover .overlay-btn{opacity:1;}
+.btn-change{background:rgba(255,255,255,.15);color:#fff;}
+.btn-change:hover{background:rgba(255,255,255,.3);}
+.btn-delete{background:rgba(227,24,55,.25);color:#ff6b6b;}
+.btn-delete:hover{background:var(--red);color:#fff;}
 
-/* ─── SLIDE GROUP ─── */
-.slide-group{margin-bottom:60px;}
-.slide-group-header{
-  display:flex;align-items:center;gap:14px;margin-bottom:20px;
-}
-.slide-group-num{
-  width:32px;height:32px;border-radius:50%;
-  background:var(--red);
-  font-family:'Bebas Neue',sans-serif;font-size:16px;
-  color:#fff;display:flex;align-items:center;justify-content:center;
-  flex-shrink:0;
-}
-.slide-group-label{
-  font-family:'Bebas Neue',sans-serif;font-size:20px;
-  letter-spacing:1px;color:#fff;
-}
-.slide-group-desc{font-size:11px;color:var(--muted);margin-top:2px;letter-spacing:.5px;}
-.slide-group-status{
-  margin-left:auto;
-  font-size:9px;font-weight:600;letter-spacing:2px;text-transform:uppercase;
-  padding:4px 10px;border-radius:2px;
-}
-.status-live{background:rgba(34,197,94,0.12);color:#4ade80;}
-.status-pending{background:rgba(255,255,255,0.05);color:var(--dim);}
+.num-badge{position:absolute;top:8px;left:8px;background:rgba(0,0,0,.7);font-size:8px;font-weight:700;letter-spacing:1.5px;color:#fff;padding:3px 7px;border-radius:2px;backdrop-filter:blur(4px);z-index:3;}
+.sel-badge{position:absolute;top:8px;right:8px;background:var(--red);font-size:7px;font-weight:700;letter-spacing:1px;color:#fff;padding:3px 7px;border-radius:2px;display:none;z-index:3;}
+.card.selected .sel-badge{display:block;}
 
-/* ─── CAROUSEL TRACK ─── */
-.carousel-outer{position:relative;}
-.carousel-track{
-  display:flex;gap:16px;
-  overflow-x:auto;padding:4px 0 20px;
-  scroll-behavior:smooth;
-  -webkit-overflow-scrolling:touch;
-  scrollbar-width:thin;
-}
-.carousel-track::-webkit-scrollbar{height:3px;}
-.carousel-track::-webkit-scrollbar-thumb{background:var(--dim);}
+/* placeholder */
+.placeholder{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:20px;text-align:center;cursor:pointer;}
+.ph-icon{font-size:24px;opacity:.25;}
+.ph-hl{font-family:"Bebas Neue",sans-serif;font-size:16px;color:var(--dim);letter-spacing:.5px;line-height:1.1;}
+.ph-btn{background:transparent;border:0.5px solid var(--dim);color:var(--muted);font-size:8px;font-weight:600;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;border-radius:2px;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .2s;}
+.ph-btn:hover{border-color:var(--red);color:var(--red);}
 
-/* ─── OPTION CARD ─── */
-.option-card{
-  flex-shrink:0;width:260px;
-  background:var(--card);border-radius:4px;
-  border:0.5px solid var(--border);
-  overflow:hidden;cursor:pointer;
-  transition:border-color .2s, transform .2s;
-  position:relative;
-}
-.option-card:hover{border-color:var(--red);transform:translateY(-2px);}
-.option-card.selected{border-color:var(--red);border-width:1.5px;}
+.card-meta{padding:12px 14px;}
+.card-hl{font-family:"Bebas Neue",sans-serif;font-size:14px;letter-spacing:.5px;line-height:1.1;margin-bottom:3px;}
+.card-lbl{font-size:9px;color:var(--muted);font-weight:300;}
+.card-actions{display:flex;gap:6px;margin-top:10px;border-top:0.5px solid var(--border);padding-top:10px;}
+.act-btn{flex:1;padding:6px;text-align:center;font-size:8px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;border-radius:2px;cursor:pointer;border:none;font-family:"DM Sans",sans-serif;transition:all .2s;}
+.act-select{background:rgba(227,24,55,.1);color:var(--red);}
+.act-select:hover{background:var(--red);color:#fff;}
+.card.selected .act-select{background:var(--red);color:#fff;}
+.act-preview{background:rgba(255,255,255,.05);color:var(--muted);}
+.act-preview:hover{background:rgba(255,255,255,.1);color:#fff;}
 
-.option-img-wrap{
-  width:100%;aspect-ratio:1/1;
-  position:relative;overflow:hidden;
-  background:var(--dark);
-}
-.option-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;}
-
-/* placeholder when no image */
-.option-placeholder{
-  width:100%;height:100%;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:12px;padding:24px;text-align:center;
-}
-.ph-icon{font-size:28px;opacity:.3;}
-.ph-upload-btn{
-  background:transparent;border:0.5px solid var(--dim);
-  color:var(--muted);font-size:9px;font-weight:600;letter-spacing:2px;
-  text-transform:uppercase;padding:7px 14px;border-radius:2px;
-  cursor:pointer;transition:all .2s;font-family:'DM Sans',sans-serif;
-}
-.ph-upload-btn:hover{border-color:var(--red);color:var(--red);}
-.ph-headline{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:18px;color:var(--dim);letter-spacing:1px;line-height:1.1;
-  text-align:center;
-}
-
-.option-num-badge{
-  position:absolute;top:10px;left:10px;
-  background:rgba(0,0,0,0.75);
-  font-size:9px;font-weight:700;letter-spacing:1.5px;color:#fff;
-  padding:3px 8px;border-radius:2px;backdrop-filter:blur(4px);
-}
-.selected-badge{
-  position:absolute;top:10px;right:10px;
-  background:var(--red);
-  font-size:8px;font-weight:700;letter-spacing:1px;color:#fff;
-  padding:3px 8px;border-radius:2px;
-  display:none;
-}
-.option-card.selected .selected-badge{display:block;}
-
-.option-meta{padding:14px 16px;}
-.option-headline{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:15px;letter-spacing:.5px;color:#fff;line-height:1.1;
-  margin-bottom:4px;
-}
-.option-label{font-size:10px;color:var(--muted);font-weight:300;}
-.option-actions{
-  display:flex;gap:8px;margin-top:12px;
-  border-top:0.5px solid var(--border);padding-top:12px;
-}
-.opt-btn{
-  flex:1;padding:7px;text-align:center;
-  font-size:9px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;
-  border-radius:2px;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;
-  transition:all .2s;
-}
-.opt-btn-select{background:rgba(227,24,55,.12);color:var(--red);}
-.opt-btn-select:hover{background:var(--red);color:#fff;}
-.opt-btn-preview{background:rgba(255,255,255,.05);color:var(--muted);}
-.opt-btn-preview:hover{background:rgba(255,255,255,.1);color:#fff;}
-
-/* ─── LIGHTBOX ─── */
-.lightbox{
-  position:fixed;inset:0;z-index:200;
-  background:rgba(0,0,0,.95);
-  display:none;align-items:center;justify-content:center;
-  padding:20px;
-}
+/* LIGHTBOX */
+.lightbox{position:fixed;inset:0;z-index:200;background:rgba(0,0,0,.96);display:none;align-items:center;justify-content:center;padding:20px;}
 .lightbox.open{display:flex;}
-.lightbox-img{max-width:min(600px,90vw);max-height:90vh;border-radius:4px;}
-.lightbox-close{
-  position:fixed;top:24px;right:24px;
-  width:40px;height:40px;border-radius:50%;
-  background:var(--card);border:0.5px solid var(--border);
-  color:#fff;font-size:20px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-}
-.lightbox-caption{
-  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
-  font-size:11px;color:var(--muted);letter-spacing:1px;text-align:center;
-}
+.lb-img{max-width:min(580px,88vw);max-height:88vh;border-radius:3px;}
+.lb-close{position:fixed;top:20px;right:20px;width:38px;height:38px;border-radius:50%;background:var(--card);border:0.5px solid var(--border);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.lb-cap{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);font-size:10px;color:var(--muted);letter-spacing:1px;white-space:nowrap;}
 
-/* ─── VIDEO SECTION ─── */
-.video-upload-zone{
-  border:1px dashed var(--dim);border-radius:4px;
-  padding:60px 40px;text-align:center;
-  background:var(--card);transition:border-color .2s;cursor:pointer;
-  position:relative;overflow:hidden;
-}
-.video-upload-zone:hover,.video-upload-zone.drag-over{border-color:var(--red);}
-.video-upload-zone input[type=file]{
-  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
-}
-.upload-icon{font-size:40px;margin-bottom:16px;opacity:.4;}
-.upload-title{
-  font-family:'Bebas Neue',sans-serif;font-size:24px;
-  color:var(--muted);letter-spacing:1px;margin-bottom:8px;
-}
-.upload-desc{font-size:12px;color:var(--dim);line-height:1.6;}
-.upload-formats{
-  margin-top:16px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap;
-}
-.fmt-pill{
-  background:rgba(255,255,255,.04);border:0.5px solid var(--dim);
-  color:var(--dim);font-size:9px;font-weight:600;letter-spacing:1.5px;
-  padding:4px 10px;border-radius:2px;text-transform:uppercase;
-}
-.video-previews{display:flex;gap:16px;flex-wrap:wrap;margin-top:24px;}
-.video-preview-card{
-  width:220px;background:var(--dark);border-radius:4px;
-  border:0.5px solid var(--border);overflow:hidden;
-}
-.video-preview-card video{width:100%;display:block;aspect-ratio:9/16;object-fit:cover;}
-.video-preview-meta{padding:12px;font-size:10px;color:var(--muted);}
+/* VIDEO */
+.upload-zone{border:1px dashed var(--dim);border-radius:4px;padding:52px 40px;text-align:center;background:var(--card);transition:border-color .2s;cursor:pointer;position:relative;}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--red);}
+.upload-zone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.uz-icon{font-size:36px;opacity:.3;margin-bottom:14px;}
+.uz-title{font-family:"Bebas Neue",sans-serif;font-size:22px;color:var(--muted);letter-spacing:1px;margin-bottom:6px;}
+.uz-desc{font-size:11px;color:var(--dim);line-height:1.6;}
+.uz-fmts{margin-top:14px;display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+.fmt{background:rgba(255,255,255,.04);border:0.5px solid var(--dim);color:var(--dim);font-size:8px;font-weight:600;letter-spacing:1.5px;padding:3px 9px;border-radius:2px;text-transform:uppercase;}
+.vid-previews{display:flex;gap:14px;flex-wrap:wrap;margin-top:20px;}
+.vid-card{width:200px;background:var(--dark);border-radius:4px;border:0.5px solid var(--border);overflow:hidden;}
+.vid-card video{width:100%;display:block;max-height:260px;object-fit:cover;}
+.vid-meta{padding:10px 12px;font-size:10px;color:var(--muted);}
+.vid-name{color:#fff;font-weight:500;margin-bottom:3px;word-break:break-all;}
 
-/* ─── SUMMARY PANEL ─── */
-.summary-panel{
-  background:var(--card);border:0.5px solid var(--border);
-  border-radius:4px;padding:28px;margin-top:48px;
-}
-.summary-title{
-  font-family:'Bebas Neue',sans-serif;font-size:20px;
-  letter-spacing:1px;margin-bottom:20px;color:#fff;
-}
-.summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}
-.summary-item{background:var(--dark);border-radius:4px;padding:16px;}
-.summary-item-label{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
-.summary-item-val{font-family:'Bebas Neue',sans-serif;font-size:18px;color:#fff;letter-spacing:.5px;line-height:1.2;}
+/* SUMMARY */
+.summary{background:var(--card);border:0.5px solid var(--border);border-radius:4px;padding:24px;}
+.sum-title{font-family:"Bebas Neue",sans-serif;font-size:18px;letter-spacing:1px;margin-bottom:18px;}
+.sum-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.sum-item{background:var(--dark);border-radius:4px;padding:14px 16px;}
+.sum-lbl{font-size:8px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px;}
+.sum-val{font-family:"Bebas Neue",sans-serif;font-size:15px;color:#fff;letter-spacing:.5px;line-height:1.2;}
 
-/* ─── FOOTER ─── */
-footer{
-  border-top:0.5px solid var(--border);
-  padding:32px 40px;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.footer-logo{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--dim);}
-.footer-note{font-size:10px;color:var(--dim);letter-spacing:1px;}
+/* FOOTER */
+footer{border-top:0.5px solid var(--border);padding:24px 40px;display:flex;align-items:center;justify-content:space-between;}
+.ft-logo{font-family:"Bebas Neue",sans-serif;font-size:16px;letter-spacing:2px;color:var(--dim);}
+.ft-note{font-size:10px;color:var(--dim);letter-spacing:.5px;}
 
-/* ─── RESPONSIVE ─── */
 @media(max-width:768px){
   nav{padding:0 20px;}
-  .hero{padding:100px 20px 48px;}
+  .hero{padding:88px 20px 48px;flex-direction:column;}
+  .hero-right{display:none;}
   .section{padding:48px 20px;}
-  .section-header{flex-direction:column;align-items:flex-start;gap:16px;}
-  .summary-grid{grid-template-columns:1fr;}
-  footer{flex-direction:column;gap:12px;text-align:center;}
+  .sum-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;gap:10px;text-align:center;}
 }
 </style>
 </head>
 <body>
 
-<!-- ─── LIGHTBOX ─── -->
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <img class="lightbox-img" id="lightbox-img" src="" alt="">
-  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
-  <div class="lightbox-caption" id="lightbox-caption"></div>
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lb" onclick="closeLb()">
+  <img class="lb-img" id="lb-img" src="" alt="">
+  <button class="lb-close" onclick="closeLb()">✕</button>
+  <div class="lb-cap" id="lb-cap"></div>
 </div>
 
-<!-- ─── NAV ─── -->
+<!-- NAV -->
 <nav>
   <div class="nav-logo">
     <span>NINJA</span>
     <div>
-      <div style="font-family:'Bebas Neue';font-size:11px;letter-spacing:3px;color:#fff;line-height:1;">BLAST™</div>
-      <div class="nav-logo-sub">Creative Showcase</div>
+      <div style="font-family:'Bebas Neue';font-size:10px;letter-spacing:3px;line-height:1;">BLAST™</div>
+      <div class="nav-logo-tag">Creative Showcase</div>
     </div>
   </div>
   <div class="nav-links">
     <a href="#carousel">Carousel</a>
     <a href="#video">Video</a>
     <a href="#summary">Summary</a>
-    <span class="nav-badge">India 2025</span>
+    <span class="nav-pill">India 2025</span>
   </div>
 </nav>
 
-<!-- ─── HERO ─── -->
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-stripe"></div>
-  <div class="hero-bg"></div>
-  <div class="hero-content">
-    <div class="hero-eyebrow">Ninja Kitchen India · Campaign Assets</div>
-    <h1 class="hero-title">NINJA<br>BLAST™<br><span class="red">CREATIVE</span><br>REVIEW</h1>
-    <p class="hero-desc">Instagram feed carousel + performance ad concepts for the Ninja Blast BC151IN launch. Multiple creative directions across each slide — select your preferred option per slide to build the final carousel.</p>
+  <div class="hero-left">
+    <div class="hero-eyebrow">Ninja Kitchen India · BC151IN · Campaign Assets</div>
+    <h1 class="hero-title">Instagram<br>Carousel<br><span style="color:var(--red)">Review</span></h1>
+    <p class="hero-desc">5 creative directions per slide — select your preferred option for each position, upload images for Slides 2 & 3, and add video assets when ready.</p>
     <div class="hero-stats">
-      <div class="stat-item">
-        <div class="stat-num">3</div>
-        <div class="stat-label">Carousel Slides</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">5</div>
-        <div class="stat-label">Options Each</div>
-      </div>
-      <div class="stat-item">
-        <div class="stat-num">1:1</div>
-        <div class="stat-label">Format</div>
-      </div>
+      <div class="stat"><div class="stat-n">3</div><div class="stat-l">Slides</div></div>
+      <div class="stat"><div class="stat-n">5</div><div class="stat-l">Options Each</div></div>
+      <div class="stat"><div class="stat-n">1:1</div><div class="stat-l">Format</div></div>
     </div>
     <a href="#carousel" class="hero-cta">View Assets ↓</a>
-    <a href="#video" class="hero-cta-ghost">Video Section</a>
+    <a href="#video" class="hero-cta-ghost">Video</a>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat-card"><div class="hsc-n">530</div><div class="hsc-l">ML Cup</div></div>
+    <div class="hero-stat-card"><div class="hsc-n">30s</div><div class="hsc-l">Blend Time</div></div>
+    <div class="hero-stat-card"><div class="hsc-n">10+</div><div class="hsc-l">Blends/Charge</div></div>
   </div>
 </section>
 
-<!-- ─── CAROUSEL SECTION ─── -->
+<!-- CAROUSEL SECTION -->
 <section class="section" id="carousel">
-  <div class="section-header">
-    <div class="section-title-group">
-      <div class="section-eyebrow">Instagram Feed · 1:1</div>
-      <div class="section-title">CAROUSEL OPTIONS</div>
-      <div class="section-sub">5 creative directions per slide — click to select your preferred option for each position.</div>
-    </div>
+  <div class="section-hdr">
+    <div class="s-eyebrow">Instagram Feed · 1:1</div>
+    <div class="s-title">Carousel Options</div>
+    <div class="s-sub">Hover a card to change or delete it. Click Select to mark your preferred option per slide.</div>
   </div>
 
-  <!-- SLIDE 1 GROUP -->
-  <div class="slide-group" id="group-slide1">
-    <div class="slide-group-header">
-      <div class="slide-group-num">1</div>
-      <div>
-        <div class="slide-group-label">SLIDE 1 — HERO FRAME</div>
-        <div class="slide-group-desc">Scroll-stopper · First impression · Brand statement</div>
-      </div>
-      <span class="slide-group-status status-live">● Live Options</span>
+  <div class="slide-group" id="g1">
+    <div class="sg-header">
+      <div class="sg-num">1</div>
+      <div><div class="sg-label">Slide 1 — Hero Frame</div><div class="sg-desc">Scroll-stopper · First impression · Brand statement</div></div>
+      <span class="sg-status live" id="st1">● Live</span>
     </div>
-    <div class="carousel-outer">
-      <div class="carousel-track" id="track-1"></div>
-    </div>
+    <div class="track" id="t1"></div>
   </div>
 
-  <!-- SLIDE 2 GROUP -->
-  <div class="slide-group" id="group-slide2">
-    <div class="slide-group-header">
-      <div class="slide-group-num">2</div>
-      <div>
-        <div class="slide-group-label">SLIDE 2 — FEATURE FRAME</div>
-        <div class="slide-group-desc">30-second stat · BlastBlade™ proof · Swipe reward</div>
-      </div>
-      <span class="slide-group-status status-pending">○ Upload Ready</span>
+  <div class="slide-group" id="g2">
+    <div class="sg-header">
+      <div class="sg-num">2</div>
+      <div><div class="sg-label">Slide 2 — Feature Frame</div><div class="sg-desc">30-second stat · BlastBlade™ proof · Swipe reward</div></div>
+      <span class="sg-status pending" id="st2">○ Upload Ready</span>
     </div>
-    <div class="carousel-outer">
-      <div class="carousel-track" id="track-2"></div>
-    </div>
+    <div class="track" id="t2"></div>
   </div>
 
-  <!-- SLIDE 3 GROUP -->
-  <div class="slide-group" id="group-slide3">
-    <div class="slide-group-header">
-      <div class="slide-group-num">3</div>
-      <div>
-        <div class="slide-group-label">SLIDE 3 — CTA FRAME</div>
-        <div class="slide-group-desc">Lifestyle · Occasions · Shop Now</div>
-      </div>
-      <span class="slide-group-status status-pending">○ Upload Ready</span>
+  <div class="slide-group" id="g3">
+    <div class="sg-header">
+      <div class="sg-num">3</div>
+      <div><div class="sg-label">Slide 3 — CTA Frame</div><div class="sg-desc">Lifestyle · Occasions · Shop Now</div></div>
+      <span class="sg-status pending" id="st3">○ Upload Ready</span>
     </div>
-    <div class="carousel-outer">
-      <div class="carousel-track" id="track-3"></div>
-    </div>
+    <div class="track" id="t3"></div>
   </div>
-
 </section>
 
-<!-- ─── VIDEO SECTION ─── -->
+<!-- VIDEO SECTION -->
 <section class="section" id="video">
-  <div class="section-header">
-    <div class="section-title-group">
-      <div class="section-eyebrow">Video Assets</div>
-      <div class="section-title">MOTION CONTENT</div>
-      <div class="section-sub">Upload video concepts for the Ninja Blast campaign — Reels, Stories, or performance video ads.</div>
+  <div class="section-hdr">
+    <div class="s-eyebrow">Video Assets</div>
+    <div class="s-title">Motion Content</div>
+    <div class="s-sub">Upload video concepts — Reels (9:16), Feed Video (1:1), Performance Ad (4:5).</div>
+  </div>
+  <div class="upload-zone" id="vzone">
+    <input type="file" accept="video/*" multiple onchange="handleVideo(event)" id="vInput">
+    <div class="uz-icon">▶</div>
+    <div class="uz-title">Drop Videos Here</div>
+    <p class="uz-desc">Drag & drop or click to upload · Reels · Feed · Performance Ad</p>
+    <div class="uz-fmts">
+      <span class="fmt">MP4</span><span class="fmt">MOV</span>
+      <span class="fmt">9:16 Reel</span><span class="fmt">1:1 Feed</span><span class="fmt">4:5 Ad</span>
     </div>
   </div>
-
-  <div class="video-upload-zone" id="videoZone">
-    <input type="file" accept="video/*" multiple onchange="handleVideoUpload(event)" id="videoInput">
-    <div class="upload-icon">▶</div>
-    <div class="upload-title">DROP VIDEOS HERE</div>
-    <p class="upload-desc">Drag & drop or click to upload video concepts<br>Reels (9:16) · Feed Video (1:1) · Performance Ad (4:5)</p>
-    <div class="upload-formats">
-      <span class="fmt-pill">MP4</span>
-      <span class="fmt-pill">MOV</span>
-      <span class="fmt-pill">9:16 Reel</span>
-      <span class="fmt-pill">1:1 Feed</span>
-      <span class="fmt-pill">4:5 Ad</span>
-    </div>
-  </div>
-  <div class="video-previews" id="videoPreviews"></div>
+  <div class="vid-previews" id="vPreviews"></div>
 </section>
 
-<!-- ─── SUMMARY ─── -->
+<!-- SUMMARY -->
 <section class="section" id="summary">
-  <div class="section-header">
-    <div class="section-title-group">
-      <div class="section-eyebrow">Selection Summary</div>
-      <div class="section-title">YOUR FINAL CAROUSEL</div>
-      <div class="section-sub">Your selected option from each slide group.</div>
-    </div>
+  <div class="section-hdr">
+    <div class="s-eyebrow">Selection Summary</div>
+    <div class="s-title">Final Carousel</div>
+    <div class="s-sub">Your chosen option per slide.</div>
   </div>
-  <div class="summary-panel">
-    <div class="summary-title">SELECTED OPTIONS</div>
-    <div class="summary-grid">
-      <div class="summary-item">
-        <div class="summary-item-label">Slide 1 · Hero</div>
-        <div class="summary-item-val" id="sel-1">No selection</div>
-      </div>
-      <div class="summary-item">
-        <div class="summary-item-label">Slide 2 · Feature</div>
-        <div class="summary-item-val" id="sel-2">No selection</div>
-      </div>
-      <div class="summary-item">
-        <div class="summary-item-label">Slide 3 · CTA</div>
-        <div class="summary-item-val" id="sel-3">No selection</div>
-      </div>
+  <div class="summary">
+    <div class="sum-title">Selected Options</div>
+    <div class="sum-grid">
+      <div class="sum-item"><div class="sum-lbl">Slide 1 · Hero</div><div class="sum-val" id="sel1">—</div></div>
+      <div class="sum-item"><div class="sum-lbl">Slide 2 · Feature</div><div class="sum-val" id="sel2">—</div></div>
+      <div class="sum-item"><div class="sum-lbl">Slide 3 · CTA</div><div class="sum-val" id="sel3">—</div></div>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="footer-logo">NINJA BLAST™</div>
-  <div class="footer-note">Creative Review · Ninja Kitchen India · @ninjakitchenin · sharkninja.in</div>
-  <div class="footer-note">BC151IN · 2025</div>
+  <div class="ft-logo">Ninja Blast™</div>
+  <div class="ft-note">Ninja Kitchen India · @ninjakitchenin · sharkninja.in</div>
+  <div class="ft-note">BC151IN · 2025</div>
 </footer>
 
 <script>
@@ -539,55 +334,79 @@ const slide1Options = [
     }
 ];
 
-const slide2Options = [{"headline": "30 SECONDS", "label": "Gym Lifestyle / Stat"}, {"headline": "BLEND LIKE A PRO", "label": "Feature Infographic"}, {"headline": "ICE. FRUIT. DONE.", "label": "BlastBlade Close-up"}, {"headline": "10+ BLENDS PER CHARGE", "label": "USB-C Power Story"}, {"headline": "SMOOTH. EVERY TIME.", "label": "Dark Studio"}];
-const slide3Options = [{"headline": "GYM \u00b7 OFFICE \u00b7 TRAVEL", "label": "Occasions List / Cream"}, {"headline": "MADE FOR YOUR LIFE", "label": "Lifestyle / Backpack"}, {"headline": "BLEND. SIP. GO.", "label": "Colors Lineup"}, {"headline": "YOUR RULES.", "label": "Editorial Dark"}, {"headline": "SHOP NOW", "label": "Direct Response"}];
+const slide2Options = [{"headline": "30 SECONDS", "label": "Gym Lifestyle / Stat", "src": null}, {"headline": "BLEND LIKE A PRO", "label": "Feature Infographic", "src": null}, {"headline": "ICE. FRUIT. DONE.", "label": "BlastBlade Close-up", "src": null}, {"headline": "10+ BLENDS PER CHARGE", "label": "USB-C Power Story", "src": null}, {"headline": "SMOOTH. EVERY TIME.", "label": "Dark Studio", "src": null}];
+const slide3Options = [{"headline": "GYM \u00b7 OFFICE \u00b7 TRAVEL", "label": "Occasions List / Cream", "src": null}, {"headline": "MADE FOR YOUR LIFE", "label": "Lifestyle / Backpack", "src": null}, {"headline": "BLEND. SIP. GO.", "label": "Colors Lineup", "src": null}, {"headline": "YOUR RULES.", "label": "Editorial Dark", "src": null}, {"headline": "SHOP NOW", "label": "Direct Response", "src": null}];
 
 const selections = {1: null, 2: null, 3: null};
 
-function buildTrack(trackId, slideNum, options, hasImages) {
+/* ── BUILD CARDS ── */
+function buildTrack(trackId, slideNum, options) {
   const track = document.getElementById(trackId);
+  track.innerHTML = '';
   options.forEach((opt, i) => {
+    if (!opt) return; // deleted slot
+    const n = i + 1;
     const card = document.createElement('div');
-    card.className = 'option-card';
-    card.id = `card-${slideNum}-${i+1}`;
+    card.className = 'card';
+    card.id = `c${slideNum}-${n}`;
 
     const imgWrap = document.createElement('div');
-    imgWrap.className = 'option-img-wrap';
+    imgWrap.className = 'img-wrap';
 
-    if (hasImages && opt.src) {
+    if (opt.src) {
       const img = document.createElement('img');
       img.src = opt.src;
       img.alt = opt.headline;
       img.loading = 'lazy';
       imgWrap.appendChild(img);
+
+      // overlay: change + delete buttons (only when image exists)
+      const overlay = document.createElement('div');
+      overlay.className = 'card-overlay';
+      overlay.innerHTML = `
+        <button class="overlay-btn btn-change" title="Change image" onclick="triggerChange(${slideNum},${n},event)">✎</button>
+        <button class="overlay-btn btn-delete" title="Delete card" onclick="deleteCard(${slideNum},${n},event)">✕</button>`;
+      imgWrap.appendChild(overlay);
     } else {
+      // placeholder
       imgWrap.innerHTML = `
-        <div class="option-placeholder">
+        <div class="placeholder" onclick="triggerChange(${slideNum},${n},event)">
           <div class="ph-icon">+</div>
-          <div class="ph-headline">${opt.headline}</div>
-          <button class="ph-upload-btn" onclick="triggerUpload(${slideNum},${i+1},event)">Upload Image</button>
-          <input type="file" accept="image/*" id="img-input-${slideNum}-${i+1}" style="display:none" onchange="handleImgUpload(event,${slideNum},${i+1})">
+          <div class="ph-hl">${opt.headline}</div>
+          <div class="ph-btn">Upload Image</div>
+        </div>
+        <div class="card-overlay" style="justify-content:flex-end;align-items:flex-start;">
+          <button class="overlay-btn btn-delete" title="Delete card" onclick="deleteCard(${slideNum},${n},event)">✕</button>
         </div>`;
     }
 
+    // hidden file input
+    const fileInput = document.createElement('input');
+    fileInput.type = 'file';
+    fileInput.accept = 'image/*';
+    fileInput.id = `fi-${slideNum}-${n}`;
+    fileInput.style.display = 'none';
+    fileInput.onchange = e => handleImgChange(e, slideNum, n);
+    imgWrap.appendChild(fileInput);
+
     const numBadge = document.createElement('div');
-    numBadge.className = 'option-num-badge';
-    numBadge.textContent = `Option ${i+1}`;
+    numBadge.className = 'num-badge';
+    numBadge.textContent = `Option ${n}`;
     imgWrap.appendChild(numBadge);
 
     const selBadge = document.createElement('div');
-    selBadge.className = 'selected-badge';
+    selBadge.className = 'sel-badge';
     selBadge.textContent = '✓ Selected';
     imgWrap.appendChild(selBadge);
 
     const meta = document.createElement('div');
-    meta.className = 'option-meta';
+    meta.className = 'card-meta';
     meta.innerHTML = `
-      <div class="option-headline">${opt.headline}</div>
-      <div class="option-label">${opt.label}</div>
-      <div class="option-actions">
-        <button class="opt-btn opt-btn-select" onclick="selectOption(${slideNum},${i+1},'${opt.headline}')">Select</button>
-        ${hasImages && opt.src ? `<button class="opt-btn opt-btn-preview" onclick="openLightbox('${opt.src}','${opt.headline} · Option ${i+1}')">Preview</button>` : ''}
+      <div class="card-hl">${opt.headline}</div>
+      <div class="card-lbl">${opt.label}</div>
+      <div class="card-actions">
+        <button class="act-btn act-select" onclick="selectOpt(${slideNum},${n},'${opt.headline.replace(/'/g,"\'")}')">Select</button>
+        ${opt.src ? `<button class="act-btn act-preview" onclick="openLb('${opt.src}','${opt.headline} · Option ${n}',event)">Preview</button>` : ''}
       </div>`;
 
     card.appendChild(imgWrap);
@@ -596,104 +415,96 @@ function buildTrack(trackId, slideNum, options, hasImages) {
   });
 }
 
-function selectOption(slideNum, optNum, headline) {
-  // deselect previous
-  document.querySelectorAll(`[id^="card-${slideNum}-"]`).forEach(c => c.classList.remove('selected'));
-  // select new
-  document.getElementById(`card-${slideNum}-${optNum}`).classList.add('selected');
-  selections[slideNum] = {optNum, headline};
-  // update summary
-  document.getElementById(`sel-${slideNum}`).textContent = `Option ${optNum} — ${headline}`;
+/* ── SELECT ── */
+function selectOpt(slide, n, headline) {
+  document.querySelectorAll(`[id^="c${slide}-"]`).forEach(c => c.classList.remove('selected'));
+  const card = document.getElementById(`c${slide}-${n}`);
+  if (card) card.classList.add('selected');
+  selections[slide] = {n, headline};
+  document.getElementById(`sel${slide}`).textContent = `Option ${n} — ${headline}`;
 }
 
-function openLightbox(src, caption) {
-  document.getElementById('lightbox-img').src = src;
-  document.getElementById('lightbox-caption').textContent = caption;
-  document.getElementById('lightbox').classList.add('open');
-  event.stopPropagation();
-}
-
-function closeLightbox() {
-  document.getElementById('lightbox').classList.remove('open');
-}
-
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
-
-function triggerUpload(slide, opt, e) {
+/* ── DELETE ── */
+function deleteCard(slide, n, e) {
   e.stopPropagation();
-  document.getElementById(`img-input-${slide}-${opt}`).click();
+  if (!confirm(`Delete Option ${n} from Slide ${slide}?`)) return;
+  const trackData = slide === 1 ? slide1Options : slide === 2 ? slide2Options : slide3Options;
+  trackData[n - 1] = null;
+  if (selections[slide] && selections[slide].n === n) {
+    selections[slide] = null;
+    document.getElementById(`sel${slide}`).textContent = '—';
+  }
+  buildTrack(`t${slide}`, slide, trackData);
+  checkStatus(slide, trackData);
 }
 
-function handleImgUpload(event, slide, opt) {
+/* ── CHANGE IMAGE ── */
+function triggerChange(slide, n, e) {
+  e.stopPropagation();
+  document.getElementById(`fi-${slide}-${n}`).click();
+}
+
+function handleImgChange(event, slide, n) {
   const file = event.target.files[0];
   if (!file) return;
   const reader = new FileReader();
   reader.onload = e => {
-    const src = e.target.result;
-    const wrap = document.querySelector(`#card-${slide}-${opt} .option-img-wrap`);
-    wrap.innerHTML = '';
-    const img = document.createElement('img');
-    img.src = src;
-    img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;';
-    const numBadge = document.createElement('div');
-    numBadge.className = 'option-num-badge';
-    numBadge.textContent = `Option ${opt}`;
-    const selBadge = document.createElement('div');
-    selBadge.className = 'selected-badge';
-    selBadge.textContent = '✓ Selected';
-    wrap.appendChild(img);
-    wrap.appendChild(numBadge);
-    wrap.appendChild(selBadge);
-    // update preview button
-    const actions = document.querySelector(`#card-${slide}-${opt} .option-actions`);
-    if (!actions.querySelector('.opt-btn-preview')) {
-      const btn = document.createElement('button');
-      btn.className = 'opt-btn opt-btn-preview';
-      btn.textContent = 'Preview';
-      btn.onclick = () => openLightbox(src, `Slide ${slide} · Option ${opt}`);
-      actions.appendChild(btn);
+    const trackData = slide === 1 ? slide1Options : slide === 2 ? slide2Options : slide3Options;
+    if (trackData[n - 1]) {
+      trackData[n - 1].src = e.target.result;
     }
-    // mark as uploaded
-    document.querySelector(`#group-slide${slide} .slide-group-status`).textContent = '● Options Ready';
-    document.querySelector(`#group-slide${slide} .slide-group-status`).className = 'slide-group-status status-live';
+    buildTrack(`t${slide}`, slide, trackData);
+    checkStatus(slide, trackData);
   };
   reader.readAsDataURL(file);
 }
 
-function handleVideoUpload(event) {
-  const files = Array.from(event.target.files);
-  const container = document.getElementById('videoPreviews');
-  files.forEach(file => {
-    const url = URL.createObjectURL(file);
-    const card = document.createElement('div');
-    card.className = 'video-preview-card';
-    card.innerHTML = `
-      <video src="${url}" controls muted playsinline></video>
-      <div class="video-preview-meta">
-        <div style="color:#fff;font-weight:500;margin-bottom:4px;">${file.name}</div>
-        <div>${(file.size/1024/1024).toFixed(1)} MB</div>
-      </div>`;
-    container.appendChild(card);
-  });
+/* ── STATUS BADGE ── */
+function checkStatus(slide, data) {
+  const hasAny = data.some(d => d && d.src);
+  const hasAll = data.filter(Boolean).every(d => d.src);
+  const el = document.getElementById(`st${slide}`);
+  if (hasAll && hasAny) { el.textContent = '● Live'; el.className = 'sg-status live'; }
+  else if (hasAny) { el.textContent = '◑ Partial'; el.className = 'sg-status live'; }
+  else { el.textContent = '○ Upload Ready'; el.className = 'sg-status pending'; }
 }
 
-// drag over styling
-const zone = document.getElementById('videoZone');
-zone.addEventListener('dragover', e => { e.preventDefault(); zone.classList.add('drag-over'); });
-zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
-zone.addEventListener('drop', e => {
-  e.preventDefault();
-  zone.classList.remove('drag-over');
+/* ── LIGHTBOX ── */
+function openLb(src, cap, e) {
+  if (e) e.stopPropagation();
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lb-cap').textContent = cap;
+  document.getElementById('lb').classList.add('open');
+}
+function closeLb() { document.getElementById('lb').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLb(); });
+
+/* ── VIDEO ── */
+function handleVideo(event) {
+  Array.from(event.target.files).forEach(file => {
+    const url = URL.createObjectURL(file);
+    const card = document.createElement('div');
+    card.className = 'vid-card';
+    card.innerHTML = `<video src="${url}" controls muted playsinline></video>
+      <div class="vid-meta"><div class="vid-name">${file.name}</div><div>${(file.size/1024/1024).toFixed(1)} MB</div></div>`;
+    document.getElementById('vPreviews').appendChild(card);
+  });
+}
+const vz = document.getElementById('vzone');
+vz.addEventListener('dragover', e => { e.preventDefault(); vz.classList.add('drag-over'); });
+vz.addEventListener('dragleave', () => vz.classList.remove('drag-over'));
+vz.addEventListener('drop', e => {
+  e.preventDefault(); vz.classList.remove('drag-over');
   const dt = new DataTransfer();
   Array.from(e.dataTransfer.files).forEach(f => dt.items.add(f));
-  document.getElementById('videoInput').files = dt.files;
-  handleVideoUpload({target: {files: dt.files}});
+  document.getElementById('vInput').files = dt.files;
+  handleVideo({target: {files: dt.files}});
 });
 
-// init
-buildTrack('track-1', 1, slide1Options, true);
-buildTrack('track-2', 2, slide2Options, false);
-buildTrack('track-3', 3, slide3Options, false);
+/* ── INIT ── */
+buildTrack('t1', 1, slide1Options);
+buildTrack('t2', 2, slide2Options);
+buildTrack('t3', 3, slide3Options);
 </script>
 </body>
 </html>
