@@ -414,19 +414,12 @@ function buildTrack(slideNum) {
         <div class="placeholder" onclick="triggerChange(${slideNum},${n},event)">
           <div class="ph-icon">+</div>
           <div class="ph-hl">${opt.headline}</div>
-          <div class="ph-btn">Upload Image</div>
+          <button class="ph-btn" type="button" onclick="triggerChange(${slideNum},${n},event)">Upload Image</button>
         </div>
         <div class="card-overlay" style="align-items:flex-start;justify-content:flex-end;">
           <button class="overlay-btn btn-delete" title="Delete" onclick="deleteCard(${slideNum},${n},event)" style="opacity:1;">✕</button>
         </div>`;
     }
-
-    // hidden file input
-    const fi = document.createElement('input');
-    fi.type = 'file'; fi.accept = 'image/*';
-    fi.id = `fi-${slideNum}-${n}`; fi.style.display = 'none';
-    fi.onchange = e => handleImgChange(e, slideNum, n);
-    imgWrap.appendChild(fi);
 
     const numBadge = document.createElement('div');
     numBadge.className = 'num-badge';
@@ -488,9 +481,25 @@ function deleteCard(slide, n, e) {
   showToast(`Option ${n} deleted.`);
 }
 
+/* single global file input — avoids overflow:hidden blocking .click() */
+const _gfi = document.createElement('input');
+_gfi.type = 'file';
+_gfi.accept = 'image/*';
+_gfi.style.cssText = 'position:fixed;top:-200px;left:-200px;width:1px;height:1px;opacity:0;pointer-events:none;';
+document.body.appendChild(_gfi);
+let _pending = null;
+_gfi.addEventListener('change', e => {
+  if (!_pending) return;
+  handleImgChange(e, _pending.slide, _pending.n);
+  _pending = null;
+  _gfi.value = '';
+});
+
 function triggerChange(slide, n, e) {
-  e.stopPropagation();
-  document.getElementById(`fi-${slide}-${n}`).click();
+  if (e) e.stopPropagation();
+  _pending = {slide, n};
+  _gfi.value = '';
+  _gfi.click();
 }
 
 function handleImgChange(event, slide, n) {
