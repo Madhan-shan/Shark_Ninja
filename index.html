@@ -304,87 +304,171 @@ const slide1Options = [
 const slide2Options = [{"headline": "30 SECONDS", "label": "Gym Lifestyle / Stat", "src": null}, {"headline": "BLEND LIKE A PRO", "label": "Feature Infographic", "src": null}, {"headline": "ICE. FRUIT. DONE.", "label": "BlastBlade Close-up", "src": null}, {"headline": "10+ BLENDS PER CHARGE", "label": "USB-C Power Story", "src": null}, {"headline": "SMOOTH. EVERY TIME.", "label": "Dark Studio", "src": null}];
 const slide3Options = [{"headline": "GYM \u00b7 OFFICE \u00b7 TRAVEL", "label": "Occasions List / Cream", "src": null}, {"headline": "MADE FOR YOUR LIFE", "label": "Lifestyle / Backpack", "src": null}, {"headline": "BLEND. SIP. GO.", "label": "Colors Lineup", "src": null}, {"headline": "YOUR RULES.", "label": "Editorial Dark", "src": null}, {"headline": "SHOP NOW", "label": "Direct Response", "src": null}];
 
-var SK = 'ninjablast_v2';
-var trackData = {};
-var appState;
+/* =============================================
+   STORAGE
+   Images  -> IndexedDB  (no size limit)
+   Metadata -> localStorage (deletions, selections)
+============================================= */
+var IDB_NAME = 'ninja_blast_idb';
+var IDB_STORE = 'imgs';
+var idb = null;
+
+function openIDB(cb) {
+  if (idb) { cb(idb); return; }
+  var req = indexedDB.open(IDB_NAME, 1);
+  req.onupgradeneeded = function(e) {
+    e.target.result.createObjectStore(IDB_STORE);
+  };
+  req.onsuccess = function(e) { idb = e.target.result; cb(idb); };
+  req.onerror   = function()  { cb(null); };
+}
+
+function idbPut(key, val, cb) {
+  openIDB(function(db) {
+    if (!db) { cb && cb(false); return; }
+    var tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).put(val, key);
+    tx.oncomplete = function() { cb && cb(true); };
+    tx.onerror    = function() { cb && cb(false); };
+  });
+}
+
+function idbGet(key, cb) {
+  openIDB(function(db) {
+    if (!db) { cb(null); return; }
+    var tx  = db.transaction(IDB_STORE, 'readonly');
+    var req = tx.objectStore(IDB_STORE).get(key);
+    req.onsuccess = function() { cb(req.result || null); };
+    req.onerror   = function() { cb(null); };
+  });
+}
+
+function idbDel(key) {
+  openIDB(function(db) {
+    if (!db) return;
+    db.transaction(IDB_STORE, 'readwrite').objectStore(IDB_STORE).delete(key);
+  });
+}
+
+function idbClear(cb) {
+  openIDB(function(db) {
+    if (!db) { cb && cb(); return; }
+    var tx = db.transaction(IDB_STORE, 'readwrite');
+    tx.objectStore(IDB_STORE).clear();
+    tx.oncomplete = function() { cb && cb(); };
+  });
+}
+
+/* Load all image keys in parallel, resolve with map key->src */
+function loadAllImages(keys, cb) {
+  if (!keys.length) { cb({}); return; }
+  var results = {};
+  var pending = keys.length;
+  keys.forEach(function(k) {
+    idbGet(k, function(src) {
+      if (src) results[k] = src;
+      if (--pending === 0) cb(results);
+    });
+  });
+}
+
+/* =============================================
+   METADATA (localStorage - small, no images)
+============================================= */
+var LSK = 'ninjablast_meta_v1';
 
 function defaultState() {
   return {
-    deletions: {'1':[],'2':[],'3':[]},
-    changes: {},
+    deletions:  {'1':[],'2':[],'3':[]},
+    imgKeys:    [],          // which IDB keys exist
     selections: {'1':null,'2':null,'3':null}
   };
 }
 
-function loadState() {
+function loadMeta() {
   try {
-    var raw = localStorage.getItem(SK);
-    if (!raw) return defaultState();
-    var s = JSON.parse(raw);
-    // normalise keys
+    var r = localStorage.getItem(LSK);
+    if (!r) return defaultState();
+    var s = JSON.parse(r);
     ['1','2','3'].forEach(function(k) {
-      if (!s.deletions[k]) s.deletions[k] = [];
+      if (!s.deletions[k])             s.deletions[k]  = [];
       if (s.selections[k] === undefined) s.selections[k] = null;
     });
+    if (!s.imgKeys) s.imgKeys = [];
     return s;
   } catch(e) { return defaultState(); }
 }
 
-function saveState() {
+function saveMeta() {
   try {
-    localStorage.setItem(SK, JSON.stringify({
-      deletions: appState.deletions,
-      changes: appState.changes,
-      selections: appState.selections
-    }));
+    localStorage.setItem(LSK, JSON.stringify(appState));
   } catch(e) {
-    showToast('Storage full - try a smaller image.', true);
+    showToast('Could not save settings.', true);
   }
 }
 
 function clearState() {
   if (!confirm('Reset all changes?')) return;
-  localStorage.removeItem(SK);
-  localStorage.removeItem('ninja_blast_v1');
-  appState = defaultState();
-  initTracks();
-  ['sel1','sel2','sel3'].forEach(function(id) {
-    document.getElementById(id).textContent = '-';
+  idbClear(function() {
+    localStorage.removeItem(LSK);
+    localStorage.removeItem('ninjablast_v2');
+    localStorage.removeItem('ninja_blast_v1');
+    appState = defaultState();
+    trackData = {};
+    initTracks();
+    ['sel1','sel2','sel3'].forEach(function(id) {
+      document.getElementById(id).textContent = '-';
+    });
+    showToast('Reset complete.');
   });
-  showToast('Reset complete.');
 }
 
+/* =============================================
+   RUNTIME STATE
+============================================= */
+var trackData = {};
+var appState  = loadMeta();
+
+/* =============================================
+   INIT - async because images come from IDB
+============================================= */
 function initTracks() {
   trackData = {
-    1: slide1Options.map(function(o) { return o ? Object.assign({},o) : null; }),
-    2: slide2Options.map(function(o) { return o ? Object.assign({},o) : null; }),
-    3: slide3Options.map(function(o) { return o ? Object.assign({},o) : null; })
+    1: slide1Options.map(function(o) { return o ? Object.assign({}, o) : null; }),
+    2: slide2Options.map(function(o) { return o ? Object.assign({}, o) : null; }),
+    3: slide3Options.map(function(o) { return o ? Object.assign({}, o) : null; })
   };
 
+  /* apply deletions */
   ['1','2','3'].forEach(function(sk) {
     var s = parseInt(sk);
-    var dels = appState.deletions[sk] || [];
-    dels.forEach(function(idx) { trackData[s][idx] = null; });
+    (appState.deletions[sk] || []).forEach(function(idx) {
+      trackData[s][idx] = null;
+    });
   });
 
-  Object.keys(appState.changes || {}).forEach(function(key) {
-    var parts = key.split('-');
-    var s = parseInt(parts[0]);
-    var n = parseInt(parts[1]);
-    var src = appState.changes[key];
-    if (trackData[s]) {
+  /* load images from IDB then build */
+  loadAllImages(appState.imgKeys || [], function(imgMap) {
+    Object.keys(imgMap).forEach(function(key) {
+      var parts = key.split('-');
+      var s = parseInt(parts[0]);
+      var n = parseInt(parts[1]);
+      if (!trackData[s]) return;
       if (trackData[s][n-1]) {
-        trackData[s][n-1].src = src;
+        trackData[s][n-1].src = imgMap[key];
       } else {
-        trackData[s][n-1] = { headline: 'Option '+n, label: 'Uploaded', src: src };
+        trackData[s][n-1] = { headline: 'Option '+n, label: 'Uploaded', src: imgMap[key] };
       }
-    }
+    });
+
+    [1,2,3].forEach(function(s) { buildTrack(s); });
+    restoreSelections();
   });
+}
 
-  [1,2,3].forEach(function(s) { buildTrack(s); });
-
+function restoreSelections() {
   ['1','2','3'].forEach(function(sk) {
-    var s = parseInt(sk);
+    var s   = parseInt(sk);
     var sel = appState.selections[sk];
     if (sel && sel.n) {
       var card = document.getElementById('c'+s+'-'+sel.n);
@@ -397,6 +481,9 @@ function initTracks() {
   });
 }
 
+/* =============================================
+   BUILD CARDS
+============================================= */
 function buildTrack(slideNum) {
   document.querySelectorAll('[id^="bfi-'+slideNum+'-"]').forEach(function(el) { el.remove(); });
   var track = document.getElementById('t'+slideNum);
@@ -404,24 +491,29 @@ function buildTrack(slideNum) {
 
   trackData[slideNum].forEach(function(opt, i) {
     if (opt === null) return;
-    var n = i + 1;
+    var n       = i + 1;
     var inputId = 'bfi-'+slideNum+'-'+n;
 
+    /* file input at body level */
     var fi = document.createElement('input');
-    fi.type = 'file';
-    fi.accept = 'image/*';
-    fi.id = inputId;
+    fi.type    = 'file';
+    fi.accept  = 'image/*';
+    fi.id      = inputId;
     fi.style.cssText = 'position:fixed;top:-999px;left:-999px;width:1px;height:1px;opacity:0;pointer-events:none;';
-    fi.addEventListener('change', (function(sl,nn) {
-      return function(e) { if (e.target.files[0]) handleImgChange(e, sl, nn); fi.value=''; };
+    fi.addEventListener('change', (function(sl, nn) {
+      return function(e) {
+        if (e.target.files[0]) handleImgChange(e, sl, nn);
+        fi.value = '';
+      };
     })(slideNum, n));
     document.body.appendChild(fi);
 
+    /* card */
     var card = document.createElement('div');
     card.className = 'card';
     card.id = 'c'+slideNum+'-'+n;
-    var savedSel = appState.selections[String(slideNum)];
-    if (savedSel && savedSel.n === n) card.classList.add('selected');
+    var saved = appState.selections[String(slideNum)];
+    if (saved && saved.n === n) card.classList.add('selected');
 
     var imgWrap = document.createElement('div');
     imgWrap.className = 'img-wrap';
@@ -449,7 +541,7 @@ function buildTrack(slideNum) {
         '<div class="sel-badge">&#10003; Selected</div>';
     }
 
-    var previewBtn = opt.src
+    var prevBtn = opt.src
       ? '<button class="act-btn act-prev" onclick="previewCard('+slideNum+','+n+')">Preview</button>'
       : '<label for="'+inputId+'" class="act-btn act-prev" style="cursor:pointer;">Upload</label>';
 
@@ -460,7 +552,7 @@ function buildTrack(slideNum) {
       '<div class="card-lbl">'+opt.label+'</div>'+
       '<div class="card-actions">'+
         '<button class="act-btn act-sel" onclick="selectOpt('+slideNum+','+n+')">Select</button>'+
-        previewBtn+
+        prevBtn+
       '</div>';
 
     card.appendChild(imgWrap);
@@ -469,34 +561,45 @@ function buildTrack(slideNum) {
   });
 }
 
+/* =============================================
+   ACTIONS
+============================================= */
 function selectOpt(slide, n) {
-  var opt = trackData[slide] && trackData[slide][n-1];
+  var opt      = trackData[slide] && trackData[slide][n-1];
   var headline = opt ? opt.headline : 'Option '+n;
-  document.querySelectorAll('[id^="c'+slide+'-"]').forEach(function(c) { c.classList.remove('selected'); });
+  document.querySelectorAll('[id^="c'+slide+'-"]').forEach(function(c) {
+    c.classList.remove('selected');
+  });
   var card = document.getElementById('c'+slide+'-'+n);
   if (card) card.classList.add('selected');
-  var sk = String(slide);
-  appState.selections[sk] = {n: n, headline: headline};
+  appState.selections[String(slide)] = { n: n, headline: headline };
   document.getElementById('sel'+slide).textContent = 'Option '+n+' - '+headline;
-  saveState();
+  saveMeta();
   showToast('Slide '+slide+' - Option '+n+' selected.');
 }
 
 function deleteCard(slide, n, e) {
   e.stopPropagation();
   if (!confirm('Delete Option '+n+' from Slide '+slide+'?')) return;
-  var idx = n - 1;
+  var idx    = n - 1;
+  var sk     = String(slide);
+  var imgKey = slide+'-'+n;
+
   trackData[slide][idx] = null;
-  var sk = String(slide);
+
   if (!appState.deletions[sk]) appState.deletions[sk] = [];
   if (appState.deletions[sk].indexOf(idx) === -1) appState.deletions[sk].push(idx);
-  delete appState.changes[slide+'-'+n];
+
+  /* remove from IDB + metadata */
+  idbDel(imgKey);
+  appState.imgKeys = (appState.imgKeys || []).filter(function(k) { return k !== imgKey; });
+
   var sel = appState.selections[sk];
   if (sel && sel.n === n) {
     appState.selections[sk] = null;
     document.getElementById('sel'+slide).textContent = '-';
   }
-  saveState();
+  saveMeta();
   buildTrack(slide);
   checkStatus(slide);
   showToast('Option '+n+' deleted.');
@@ -505,34 +608,50 @@ function deleteCard(slide, n, e) {
 function handleImgChange(event, slide, n) {
   var file = event.target.files[0];
   if (!file) return;
+  showToast('Saving...');
   var reader = new FileReader();
-  reader.onload = function(e) {
-    var src = e.target.result;
-    if (trackData[slide][n-1]) {
-      trackData[slide][n-1].src = src;
-    } else {
-      trackData[slide][n-1] = { headline: 'Option '+n, label: 'Uploaded', src: src };
-    }
-    var sk = String(slide);
-    if (!appState.deletions[sk]) appState.deletions[sk] = [];
-    appState.deletions[sk] = appState.deletions[sk].filter(function(i) { return i !== n-1; });
-    appState.changes[slide+'-'+n] = src;
-    saveState();
-    buildTrack(slide);
-    checkStatus(slide);
-    showToast('Option '+n+' updated.');
+  reader.onload = function(ev) {
+    var src    = ev.target.result;
+    var imgKey = slide+'-'+n;
+
+    /* save image to IndexedDB */
+    idbPut(imgKey, src, function(ok) {
+      if (!ok) { showToast('Failed to save image.', true); return; }
+
+      /* update runtime */
+      if (trackData[slide][n-1]) {
+        trackData[slide][n-1].src = src;
+      } else {
+        trackData[slide][n-1] = { headline: 'Option '+n, label: 'Uploaded', src: src };
+      }
+
+      /* update metadata */
+      var sk = String(slide);
+      if (!appState.deletions[sk]) appState.deletions[sk] = [];
+      appState.deletions[sk] = appState.deletions[sk].filter(function(i) { return i !== n-1; });
+      if (!appState.imgKeys) appState.imgKeys = [];
+      if (appState.imgKeys.indexOf(imgKey) === -1) appState.imgKeys.push(imgKey);
+      saveMeta();
+
+      buildTrack(slide);
+      checkStatus(slide);
+      showToast('Option '+n+' saved.');
+    });
   };
   reader.readAsDataURL(file);
 }
 
+/* =============================================
+   UTILITIES
+============================================= */
 function checkStatus(slide) {
-  var data = trackData[slide].filter(Boolean);
+  var data    = trackData[slide].filter(Boolean);
   var allHave = data.length > 0 && data.every(function(d) { return d.src; });
   var anyHave = data.some(function(d) { return d.src; });
   var el = document.getElementById('st'+slide);
-  if (allHave) { el.textContent='Live'; el.className='sg-status live'; }
-  else if (anyHave) { el.textContent='Partial'; el.className='sg-status live'; }
-  else { el.textContent='Upload Ready'; el.className='sg-status pending'; }
+  if (allHave)      { el.textContent='Live';         el.className='sg-status live'; }
+  else if (anyHave) { el.textContent='Partial';      el.className='sg-status live'; }
+  else              { el.textContent='Upload Ready'; el.className='sg-status pending'; }
 }
 
 function previewCard(slide, n) {
@@ -546,7 +665,7 @@ function openLb(src, cap) {
   document.getElementById('lb').classList.add('open');
 }
 function closeLb() { document.getElementById('lb').classList.remove('open'); }
-document.addEventListener('keydown', function(e) { if (e.key==='Escape') closeLb(); });
+document.addEventListener('keydown', function(e) { if (e.key === 'Escape') closeLb(); });
 
 function showToast(msg, isError) {
   var t = document.getElementById('toast');
@@ -557,18 +676,19 @@ function showToast(msg, isError) {
     document.body.appendChild(t);
   }
   t.textContent = msg;
-  t.style.borderColor = isError ? '#E31837' : '#333';
+  t.style.borderColor = isError ? '#E31837' : '#4ade80';
   t.style.opacity = '1';
   clearTimeout(t._timer);
-  t._timer = setTimeout(function() { t.style.opacity='0'; }, 2500);
+  t._timer = setTimeout(function() { t.style.opacity = '0'; }, 2500);
 }
 
 function handleVideo(event) {
   Array.from(event.target.files).forEach(function(file) {
-    var url = URL.createObjectURL(file);
+    var url  = URL.createObjectURL(file);
     var card = document.createElement('div');
     card.className = 'vid-card';
-    card.innerHTML = '<video src="'+url+'" controls muted playsinline></video>'+
+    card.innerHTML =
+      '<video src="'+url+'" controls muted playsinline></video>'+
       '<div class="vid-meta"><div class="vid-name">'+file.name+'</div>'+
       '<div>'+(file.size/1024/1024).toFixed(1)+' MB</div></div>';
     document.getElementById('vPreviews').appendChild(card);
@@ -576,15 +696,17 @@ function handleVideo(event) {
 }
 
 var vz = document.getElementById('vzone');
-vz.addEventListener('dragover', function(e) { e.preventDefault(); vz.classList.add('drag-over'); });
-vz.addEventListener('dragleave', function() { vz.classList.remove('drag-over'); });
-vz.addEventListener('drop', function(e) {
+vz.addEventListener('dragover',  function(e)  { e.preventDefault(); vz.classList.add('drag-over'); });
+vz.addEventListener('dragleave', function()   { vz.classList.remove('drag-over'); });
+vz.addEventListener('drop',      function(e)  {
   e.preventDefault();
   vz.classList.remove('drag-over');
-  handleVideo({target:{files:e.dataTransfer.files}});
+  handleVideo({ target: { files: e.dataTransfer.files } });
 });
 
-appState = loadState();
+/* =============================================
+   START
+============================================= */
 initTracks();
 
 </script>
